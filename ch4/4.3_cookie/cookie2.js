@@ -13,17 +13,20 @@ const parseCookies = (cookie = '') =>
     }, {});
 
 http.createServer(async (req, res) => {
-  console.log(req.header.cookie);
   const cookies = parseCookies(req.headers.cookie); // { mycookie: 'test' }
   // 주소가 /login으로 시작하는 경우
   if (req.url.startsWith('/login')) {
     const { query } = url.parse(req.url);
-    const { name } = qs.parse(query);
+    const { name } = qs.parse(query); // querystring: ?key=value&key2=value2
     const expires = new Date();
     // 쿠키 유효 시간을 현재시간 + 5분으로 설정
     expires.setMinutes(expires.getMinutes() + 5);
-    res.writeHead(302, {
-      Location: '/',
+    res.writeHead(302, {  // 302: redirection
+      Location: '/',  // 로그인으로 요청을 보냈는데 돌아올때는 슬래시
+      // 쿠키에 추가설정
+      // encodeURIComponent(): 한글을 안깨지게 변환
+      // HttpOnly: 자바스크립트로 접근할 수 없게 보안
+      // Path=/: 슬래시 아래의 주소에서는 쿠키가 유효하다
       'Set-Cookie': `name=${encodeURIComponent(name)}; Expires=${expires.toGMTString()}; HttpOnly; Path=/`,
     });
     res.end();
