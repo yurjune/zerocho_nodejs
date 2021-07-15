@@ -13,7 +13,6 @@ const server = http.createServer((req, res) => {
 server.on('listening', () => {
   console.log('8080번 포트가 서버에서 대기 중입니다.');
 });
-
 server.on('error', (error) => {
   console.error(error)
 });
