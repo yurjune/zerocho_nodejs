@@ -9,7 +9,7 @@ if (cluster.isMaster) {
   console.log(`마스터 프로세스 아이디: ${process.pid}`);
   // CPU 개수만큼 워커를 생산(워커쓰레드 아니고 워커프로세스)
   for (let i = 0; i < numCPUs; i += 1) {
-    cluster.fork(); // 프로세스 생성
+    cluster.fork();
   }
   // 워커가 종료되었을 때
   cluster.on('exit', (worker, code, signal) => {
