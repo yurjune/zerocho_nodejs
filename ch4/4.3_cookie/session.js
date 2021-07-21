@@ -29,6 +29,7 @@ http.createServer(async (req, res) => {
       name,
       expires,
     };
+    // redirect
     res.writeHead(302, {
       Location: '/',
       // 브라우저에는 uniqueInt를 보낸다
