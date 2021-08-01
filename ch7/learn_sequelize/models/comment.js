@@ -13,9 +13,9 @@ module.exports = class Comment extends Sequelize.Model {
         defaultValue: Sequelize.NOW,
       },
     }, {
-      sequelize,
+      sequelize,  // We need to pass the connection instance
       timestamps: false,
-      modelName: 'Comment',
+      modelName: 'Comment', // We need to choose the model name
       tableName: 'comments',
       paranoid: false,
       charset: 'utf8mb4',

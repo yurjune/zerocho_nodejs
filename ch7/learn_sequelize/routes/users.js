@@ -17,7 +17,7 @@ router.route('/')
   .post(async (req, res, next) => {
     try {
       const user = await User.create({
-        name: req.body.name,
+        name: req.body.name,  // axios.post()로부터 오는듯
         age: req.body.age,
         married: req.body.married,
       });
