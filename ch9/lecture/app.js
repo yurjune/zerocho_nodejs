@@ -8,6 +8,7 @@ const dotenv = require('dotenv')
 
 dotenv.config();
 const pageRouter = require('./routes/page');
+const authRouter = require('./routes/auth');
 
 const { sequelize } = require('./models');  // db.sequelize
 
@@ -50,6 +51,7 @@ app.use(session({
 }));
 
 app.use('/', pageRouter);
+app.use('/auth', authRouter);
 
 // 404 처리 미들웨어
 app.use((req, res, next) => {
@@ -58,7 +60,7 @@ app.use((req, res, next) => {
   next(error);
 });
 
-// 에러미들웨어
+// 에러 미들웨어
 app.use((err, req, res, next) => {
   res.locals.message = err.message; // 템플릿 엔진에서 message라는 변수 쓸 수 있게 설정
   // 배포모드에서는 에러의 스택(상세내역) 볼 수 없게 설정
