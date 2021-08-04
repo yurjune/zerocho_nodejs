@@ -49,7 +49,7 @@ app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error');  // 설정된 템플릿엔진을 사용해 view를 렌더링
 });
 
 app.listen(app.get('port'), () => {

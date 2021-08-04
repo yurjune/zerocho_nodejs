@@ -40,8 +40,14 @@ module.exports = class User extends Sequelize.Model {
   }
 
   static associate(db) {
-    // 1:N 관계: hasMany
-    // User의 id를 Comment 테이블의 commenter 컬럼이 참조하고있다
+    // 외래키인 commenter 컬럼이 현재 user의 id 컬럼을 참조
     db.User.hasMany(db.Comment, { foreignKey: 'commenter', sourceKey: 'id' });
   }
 };
+
+/* 
+associations: hasOne, belongsTo, hasMany, belongsToMany
+
+belongsToMany: 다대다 관계
+ex) user간 팔로잉 팔로우 관계
+*/

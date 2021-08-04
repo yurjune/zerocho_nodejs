@@ -1,7 +1,10 @@
-/practice
-readme.txt
-writeme.txt
-/publish
+practice
 mongo.txt
+mysql.txt
 bookContents.txt
-/ch6/6.1/node_modules
+node_modules
+uploads
+.env
+source_code
+try
+
