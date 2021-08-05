@@ -10,6 +10,8 @@ const passport = require('passport');
 dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
+const postRouter = require('./routes/post');
+const userRouter = require('./routes/user');
 
 const { sequelize } = require('./models');  // db.sequelize
 const passportConfig = require('./passport'); // index.js의 모듈을 불러옴
@@ -40,6 +42,7 @@ passportConfig();
 // middleware
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/img', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());  // 바디파서
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -60,6 +63,8 @@ app.use(passport.session());
 
 app.use('/', pageRouter);
 app.use('/auth', authRouter);
+app.use('/post', postRouter);
+app.use('/user', userRouter);
 
 // 404 처리 미들웨어
 app.use((req, res, next) => {

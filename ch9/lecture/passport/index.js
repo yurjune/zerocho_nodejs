@@ -19,7 +19,18 @@ module.exports = () => {
   // 브라우저가 세션쿠키를 보내면(요청) app.js의 passport.session() 미들웨어가 id를 알아냄
   // deserializeUser로 id를 넘겨준다
   passport.deserializeUser((id, done) => {
-    User.findOne({ where: { id } })
+    User.findOne({
+      where: { id },
+      include: [{
+        model: User,
+        attributes: ['id', 'nick'],
+        as: 'Followers',
+      }, {
+        model: User,
+        attributes: ['id', 'nick'],
+        as: 'Followings',
+      }],
+    })
       .then(user => done(null, user))
       // 복구한 user의 정보는 req.user로 접근가능
       // req.isAuthenticated = true

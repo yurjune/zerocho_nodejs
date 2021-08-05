@@ -36,6 +36,10 @@ module.exports = class User extends Sequelize.Model {
       collate: 'utf8_general_ci',
     });
   }
+  /*
+  팔로잉: 내가 상대를 팔로잉
+  팔로워: 상대가 나를 팔로잉
+  */
 
   static associate(db) {
     db.User.hasMany(db.Post);
