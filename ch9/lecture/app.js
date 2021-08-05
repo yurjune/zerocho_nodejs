@@ -4,13 +4,15 @@ const morgan = require('morgan');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const nunjucks = require('nunjucks');
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
+const passport = require('passport');
 
 dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
 
 const { sequelize } = require('./models');  // db.sequelize
+const passportConfig = require('./passport'); // index.js의 모듈을 불러옴
 
 const app = express();
 app.set('port', process.env.PORT || 8001);
@@ -33,6 +35,7 @@ sequelize.sync({ force: false })
   .catch((err) => {
     console.error(err);
   });
+passportConfig();
 
 // middleware
 app.use(morgan('dev'));
@@ -49,6 +52,11 @@ app.use(session({
     secure: false,
   },
 }));
+
+// 라우터로 가기전에 passport 미들웨어 연결
+// 세션을 받아야 해서 express session보다는 아래에 위치
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', pageRouter);
 app.use('/auth', authRouter);

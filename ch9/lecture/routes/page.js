@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.use((req, res, next) => {
   res.locals.user = null;
-  res.locals.follwerCount = 0;
+  res.locals.followerCount = 0;
   res.locals.followingCount = 0;
   res.locals.followerIdList = [];
   next();
@@ -22,6 +22,7 @@ router.get('/', (req, res) => {
   res.render('main', {
     title: 'NodeBird',
     twits,
+    user: req.user
   });
 });
 
