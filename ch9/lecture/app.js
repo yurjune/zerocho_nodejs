@@ -18,18 +18,14 @@ const passportConfig = require('./passport'); // index.js의 모듈을 불러옴
 
 const app = express();
 app.set('port', process.env.PORT || 8001);
-app.set('view engine', 'html');
+
+app.set('view engine', 'html'); // 화면엔진을 html로 설정
 nunjucks.configure('views', {
   express: app,
   watch: true,
 });
-/*
-테이블이 수정되었을 때:
-force: true: 테이블을 drop 후 다시 생성(데이터 날아감): 실무에서 불가능
-alter: true: 데이터를 유지하고 수정사항 반영
-alter는 컬럼과 기존데이터들의 불일치로 에러가 나는 경우가 종종 있다
-예를 들면 allowNull: false인 컬럼을 추가했을 때 기존 데이터는 그 컬럼이 없어서 에러가 난다
-*/
+
+// Synchronizing all models at once
 sequelize.sync({ force: false })
   .then(() => {
     console.log('데이터베이스 연결 성공');
@@ -37,6 +33,14 @@ sequelize.sync({ force: false })
   .catch((err) => {
     console.error(err);
   });
+/*
+테이블이 수정되었을 때:
+force: true: 테이블을 drop 후 다시 생성(데이터 날아감): 실무에서 불가능
+alter: true: 데이터를 유지하고 수정사항 반영
+alter는 컬럼과 기존데이터들의 불일치로 에러가 나는 경우가 종종 있다
+예를 들면 allowNull: false인 컬럼을 추가했을 때 기존 데이터는 그 컬럼이 없어서 에러가 난다
+*/
+
 passportConfig();
 
 // middleware

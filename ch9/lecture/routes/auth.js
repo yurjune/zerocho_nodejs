@@ -7,7 +7,6 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
 
 // 회원가입 라우터
-// 미들웨어 isNotLoggedIn의 next()를 받아 이후 실행
 router.post('/join', isNotLoggedIn, async (req, res, next) => {
   const { email, nick, password } = req.body;
   try {
@@ -21,7 +20,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
       nick,
       password: hash,
     });
-    return res.redirect('/'); // 메인페이지로 돌려보내기
+    return res.redirect('/');
   } catch (error) {
     console.error(error);
     return next(error);

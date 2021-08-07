@@ -1,5 +1,6 @@
 const express = require('express');
-const { Post, User } = require('../models');
+const { Post, User, Hashtag } = require('../models');
+
 const router = express.Router();
 
 router.use((req, res, next) => {
@@ -37,6 +38,39 @@ router.get('/', async (req, res, next) => {
   } catch (err) {
     console.error(err);
     next(err);
+  }
+});
+
+// 해쉬태그 검색 라우터
+// GET /hashtag?hashtag=노드
+router.get('/hashtag', async (req, res, next) => {
+  // 만약 한글 주소를 form에서 encodeURIcomponent를 했다면 decodeURIcomponent로 받아야한다
+  // const query = decodeURIComponent(req.query.hashtag);
+  const query = req.query.hashtag;
+  if (!query) {
+    return res.redirect('/');
+  }
+  try {
+    const hashtag = await Hashtag.findOne({ where: { title: query } });
+    let posts = [];
+    if (hashtag) {
+      // 노드라는 해시태그에 딸려있는 posts를 가져와라
+      // include를 하면 게시글의 작성자까지 가져온다
+      posts = await hashtag.getPosts({ 
+        include: [{ 
+          model: User,
+          attributes: ['id', 'nick'],
+        }] 
+      });
+    }
+
+    return res.render('main', {
+      title: `${query} | NodeBird`,
+      twits: posts,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(error);
   }
 });
 

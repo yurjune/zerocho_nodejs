@@ -26,7 +26,7 @@ module.exports = class User extends Sequelize.Model {
         allowNull: true,
       },
     }, {
-      sequelize,
+      sequelize,  // sequelize instance passing
       timestamps: true,
       underscored: false,
       modelName: 'User',

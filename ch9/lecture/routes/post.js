@@ -48,17 +48,24 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
       img: req.body.url,
       UserId: req.user.id,
     });
-    // const hashtags = req.body.content.match(/#[^\s#]*/g);
-    // if (hashtags) {
-    //   const result = await Promise.all(
-    //     hashtags.map(tag => {
-    //       return Hashtag.findOrCreate({
-    //         where: { title: tag.slice(1).toLowerCase() },
-    //       })
-    //     }),
-    //   );
-    //   await post.addHashtags(result.map(r => r[0]));
-    // }
+    const hashtags = req.body.content.match(/#[^\s#]*/g);
+    // [#노드, #익스프레스]
+    // [findOrCreate(노드), findOrCreate(익스프레스)]
+    // result: [[Hashtag{}, true], [Hashtag{}, true]]
+    // true이면 create된 것, false는 find
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map(tag => {
+          return Hashtag.findOrCreate({
+            where: { title: tag.slice(1).toLowerCase() },
+          })
+        }),
+        // cf) Hashtag.upsert: update or insert
+      );
+      // belongsToMany 이므로 복수형
+      // result의 첫번 째 것만 꺼내서 addHashtags
+      await post.addHashtags(result.map(r => r[0]));
+    }
     res.redirect('/');
   } catch (error) {
     console.error(error);
