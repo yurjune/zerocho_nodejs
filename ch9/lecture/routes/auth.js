@@ -31,7 +31,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
   /*
   일단 'local'까지 실행(localStrategy.js 실행)
   localStrategy에서 done함수를 만난 후 커스텀 콜백이 실행
-  커스텀 콜백의 인수는 done함수의 인수와 매칭
+  커스텀 콜백의 인수는 'local'의 done함수의 인수와 매칭
   커스텀 콜백 내부의 req.login(user, callback)을 실행시켜 serializeUser()로 user 전달
   커스텀 콜백 미사용시 자동으로 req.login() 을 실행
   */
@@ -53,7 +53,9 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
       // 이 때 세션 쿠키를 브라우저로 보내줘요
       return res.redirect('/'); // 로그인 성공
     });
-  })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙입니다.
+  })(req, res, next); // 미들웨어 안의 미들웨어
+  // authenticate()는 middleware function object를 리턴하므로,
+  // (req, res, next)를 끝에 붙여서 evoke 해주어 요청 응답 주기 유지
 });
 
 router.get('/logout', isLoggedIn, (req, res) => {

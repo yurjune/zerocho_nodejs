@@ -24,11 +24,11 @@ module.exports = () => {
       include: [{
         model: User,
         attributes: ['id', 'nick'],
-        as: 'Followers',
+        as: 'Followers',  // 이 유저를 팔로잉하는 사람 가져오기?
       }, {
         model: User,
         attributes: ['id', 'nick'],
-        as: 'Followings',
+        as: 'Followings', // 이 유저가 팔로잉한 사람 가져오기
       }],
     })
       .then(user => done(null, user))
@@ -39,7 +39,7 @@ module.exports = () => {
 
   // 이 local() 코드는 실행을 해놓는 역할
   // localStrategy.js에서 module.exports는 했지만 실행은 안되어있다
-  // 마찬가지로 index.js에서 module.exports 한 함수 또한 app.js에서 실행해줘야 한다
+  // 마찬가지로 index.js에서 module.exports한 함수 또한 app.js에서 실행해줘야 한다
   local();
   kakao();
 };

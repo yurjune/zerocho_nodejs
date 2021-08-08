@@ -41,7 +41,7 @@ alter는 컬럼과 기존데이터들의 불일치로 에러가 나는 경우가
 예를 들면 allowNull: false인 컬럼을 추가했을 때 기존 데이터는 그 컬럼이 없어서 에러가 난다
 */
 
-passportConfig();
+passportConfig(); // passport/index.js의 모듈 실행
 
 // middleware
 app.use(morgan('dev'));
