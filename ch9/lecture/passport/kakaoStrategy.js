@@ -5,9 +5,10 @@ const User = require('../models/user');
 
 module.exports = () => {
   passport.use(new KakaoStrategy({
-    clientID: process.env.KAKAO_ID, // 카카오developer에서 REST API 키를 받아 dotenv에 저장
+    clientID: process.env.KAKAO_ID, // REST API키: RESP API호출 시 사용
     callbackURL: '/auth/kakao/callback',  // OAuth Redirect URI
   }, async (accessToken, refreshToken, profile, done) => {  // OAuth2
+    console.log(accessToken);
     console.log('kakao profile', profile);
     try {
       const exUser = await User.findOne({

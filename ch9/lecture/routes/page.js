@@ -9,8 +9,8 @@ router.use((req, res, next) => {
   res.locals.user = req.user;
   res.locals.followerCount = req.user ? req.user.Followers.length : 0;
   res.locals.followingCount = req.user ? req.user.Followings.length : 0;
-  // 다음 코드는 내가 팔로잉중인 사람들의 리스트, followingIdList가 더 적합한 변수명
-  res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.id) : [];
+  // 내가 팔로잉중인 사람들의 리스트
+  res.locals.followingIdList = req.user ? req.user.Followings.map(f => f.id) : [];
   next();
 });
 
@@ -63,7 +63,6 @@ router.get('/hashtag', async (req, res, next) => {
         }] 
       });
     }
-
     return res.render('main', {
       title: `${query} | NodeBird`,
       twits: posts,

@@ -10,6 +10,7 @@ const router = express.Router();
 router.post('/join', isNotLoggedIn, async (req, res, next) => {
   const { email, nick, password } = req.body;
   try {
+    // email에 왜 중괄호??
     const exUser = await User.findOne({ where: { email } });
     if (exUser) { // 기존에 가입한 이메일인지 확인
       return res.redirect('/join?error=exist');
@@ -29,10 +30,9 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 
 router.post('/login', isNotLoggedIn, (req, res, next) => {
   /*
-  일단 'local'까지 실행(localStrategy.js 실행)
-  localStrategy에서 done함수를 만난 후 커스텀 콜백이 실행
+  localStrategy.js('local')에서 done함수를 만난 후 커스텀 콜백이 실행
   커스텀 콜백의 인수는 'local'의 done함수의 인수와 매칭
-  커스텀 콜백 내부의 req.login(user, callback)을 실행시켜 serializeUser()로 user 전달
+  커스텀 콜백 내부의 req.login()을 실행시켜 serializeUser()로 user전달
   커스텀 콜백 미사용시 자동으로 req.login() 을 실행
   */
   passport.authenticate('local', (authError, user, info) => {
@@ -40,7 +40,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
       console.error(authError);
       return next(authError);
     }
-    if (!user) {  // 로그인 실패
+    if (!user) {
       return res.redirect(`/?loginError=${info.message}`);  // 프론트로 돌려보내줌
     }
     // 사용자 객체(user)을 받으면 index.js로 가서 serializeUser 실행
@@ -51,7 +51,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
         return next(loginError);
       }
       // 이 때 세션 쿠키를 브라우저로 보내줘요
-      return res.redirect('/'); // 로그인 성공
+      return res.redirect('/');
     });
   })(req, res, next); // 미들웨어 안의 미들웨어
   // authenticate()는 middleware function object를 리턴하므로,
@@ -64,14 +64,14 @@ router.get('/logout', isLoggedIn, (req, res) => {
   res.redirect('/');
 });
 
-// 카카오 로그인 페이지로 이동
-// 로그인 성공하면 callbackURL로 카카오가 요청을 하나 쏴준다
+// 카카오 로그인 페이지로 이동 후 로그인
+// 카카오가 callbackURL로 토큰, 사용자 정보를 보내준다
 router.get('/kakao', passport.authenticate('kakao'));
 
-// 이 라우터에서 kakaoStrategy.js 실행
+// 로그인을 처리하는 부분
 router.get('/kakao/callback', passport.authenticate('kakao', {
   failureRedirect: '/',
-}), (req, res) => { // 성공
+}), (req, res) => { // done 호출 이후 실행
   res.redirect('/');
 });
 

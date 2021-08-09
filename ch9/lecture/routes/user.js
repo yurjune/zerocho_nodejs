@@ -11,7 +11,6 @@ router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
     const user = await User.findOne({ where: { id: req.user.id } });
     if (user) {
       // 내가 1번 사용자를 팔로잉
-      // hasMany이므로 add + Followings(복수형)
       await user.addFollowing(parseInt(req.params.id, 10));
       res.send('success');
     } else {

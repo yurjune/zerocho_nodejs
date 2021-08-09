@@ -46,6 +46,7 @@ passportConfig(); // passport/index.js의 모듈 실행
 // middleware
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
+// 실제파일 주소가 /img인 이유 확인해보기 /post/img가 왜 아닐까
 app.use('/img', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());  // 바디파서
 app.use(express.urlencoded({ extended: false }));

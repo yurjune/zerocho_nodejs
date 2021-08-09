@@ -44,8 +44,8 @@ const upload2 = multer();
 router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   try {
     const post = await Post.create({
-      content: req.body.content,
-      img: req.body.url,
+      content: req.body.content,  // main.html의 textarea의 name="content"??
+      img: req.body.url,  // 이미지와 게시글 엮기
       UserId: req.user.id,
     });
     const hashtags = req.body.content.match(/#[^\s#]*/g);
