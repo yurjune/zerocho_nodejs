@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/category/:name', (req, res) => {  // 라우트 매개변수
-  res.send(`hello ${req.params.name}`);
+  res.send(`hello ${req.params.name}`); // hello name
 });
 
 app.use((req, res, next) => {  // 에러 커스터마이징

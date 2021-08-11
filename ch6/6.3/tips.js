@@ -8,13 +8,14 @@ app.get('/', (req, res) => {
   res.send(req.data);
 })
 
-// 미들웨어 확장법
-// 미들웨어 안 미들웨어 사용
+// 미들웨어 확장
+// 미들웨어 안 미들웨어 사용시 끝에 (req, res, next)를 붙인다
+// 미들웨어를 실행시켜주는 효과, 요청-응답 주기 유지
 app.use('/', (req, res, next)=>{
   if(req.session.id) {
-      express.static(__dirname, 'public')(req, res, next)
+    express.static(__dirname, 'public')(req, res, next)
   } else {
-      next();
+    next();
   }
 });
 
