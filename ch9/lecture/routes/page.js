@@ -24,6 +24,15 @@ router.get('/join', (req, res) => {
 
 router.get('/', async (req, res, next) => {
   try {
+    // // 테스트 코드
+    // const writing = await Post.findOne({
+    //   where: { id: 1 },
+    //   include: { model: User, attributes: ['id', 'nick'] }
+    // })
+    // console.log('-------------')
+    // console.log(writing.id) // post의 id
+    // console.log(writing.UserId)   // 작성자의 id
+    // console.log(writing.User.id)  // 작성자의 id, include 사용시
     const posts = await Post.findAll({
       include: {
         model: User,  // 게시글 작성자
@@ -47,12 +56,13 @@ router.get('/hashtag', async (req, res, next) => {
   // 만약 한글 주소를 form에서 encodeURIcomponent를 했다면 decodeURIcomponent로 받아야한다
   // const query = decodeURIComponent(req.query.hashtag);
   const query = req.query.hashtag;
+  console.log(query); // 노드
   if (!query) {
     return res.redirect('/');
   }
   try {
     const hashtag = await Hashtag.findOne({ where: { title: query } });
-    let posts = [];
+    let posts;
     if (hashtag) {
       // 노드라는 해시태그에 딸려있는 posts를 가져와라
       // include를 하면 게시글의 작성자까지 가져온다
