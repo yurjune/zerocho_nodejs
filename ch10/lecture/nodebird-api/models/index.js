@@ -9,7 +9,11 @@ const Domain = require('./domain');
 
 const db = {}
 const sequelize = new Sequelize(
-  config.database, config.username, config.password, config
+  config.database, config.username, config.password, {
+    host: "127.0.0.1",
+    dialect: "mysql",
+    logging: false
+  }
 );
 
 db.sequelize = sequelize;
