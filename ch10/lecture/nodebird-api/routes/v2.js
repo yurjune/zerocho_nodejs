@@ -1,15 +1,12 @@
-// nodecat이 nodebird에게 보내는 요청을 처리하는 라우터
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
-const { verifyToken, deprecated } = require('./middlewares');
+const { verifyToken, apiLimiter } = require('./middlewares');
 const { Domain, User, Post, Hashtag } = require('../models');
 
 const router = express.Router();
 
-router.use(deprecated);
-
-router.post('/token', async (req, res) => {
+router.post('/token', apiLimiter, async (req, res) => {
   const { clientSecret } = req.body;
   try {
     const domain = await Domain.findOne({
@@ -25,13 +22,11 @@ router.post('/token', async (req, res) => {
         message: '등록되지 않은 도메인입니다. 먼저 도메인을 등록하세요',
       });
     }
-    // Returns the JsonWebToken as string
-    const token = jwt.sign({  // payload, secretkey, options
+    const token = jwt.sign({
       id: domain.User.id,
       nick: domain.User.nick,
-      // type: 'premium',
     }, process.env.JWT_SECRET, {
-      expiresIn: '1m', // 1분
+      expiresIn: '30m', // 30분
       issuer: 'nodebird',
     });
     return res.json({
@@ -48,17 +43,17 @@ router.post('/token', async (req, res) => {
   }
 });
 
-router.get('/test', verifyToken, (req, res) => {
+router.get('/test', verifyToken, apiLimiter, (req, res) => {
   res.json(req.decoded);
 });
 
-router.get('/posts/my', verifyToken, (req, res) => {
-  Post.findAll({ where: { userId: req.decoded.id } })  // userId
+router.get('/posts/my', apiLimiter, verifyToken, (req, res) => {
+  Post.findAll({ where: { userId: req.decoded.id } })
     .then((posts) => {
       res.json({
         code: 200,
         payload: posts,
-      })
+      });
     })
     .catch((error) => {
       console.error(error);
@@ -69,13 +64,13 @@ router.get('/posts/my', verifyToken, (req, res) => {
     });
 });
 
-router.get('/posts/hashtag/:title', verifyToken, async (req, res) => {
+router.get('/posts/hashtag/:title', verifyToken, apiLimiter, async (req, res) => {
   try {
-    const hashtag = await Hashtag.findOne({ where: { title: req.params.title }});
+    const hashtag = await Hashtag.findOne({ where: { title: req.params.title } });
     if (!hashtag) {
       return res.status(404).json({
         code: 404,
-        message: '검색 결과가 없습니다.'
+        message: '검색 결과가 없습니다',
       });
     }
     const posts = await hashtag.getPosts();
@@ -83,8 +78,8 @@ router.get('/posts/hashtag/:title', verifyToken, async (req, res) => {
       code: 200,
       payload: posts,
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({
       code: 500,
       message: '서버 에러',
