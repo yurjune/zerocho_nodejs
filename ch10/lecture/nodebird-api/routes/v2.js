@@ -1,10 +1,29 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const url = require('url');
 
 const { verifyToken, apiLimiter } = require('./middlewares');
 const { Domain, User, Post, Hashtag } = require('../models');
 
 const router = express.Router();
+
+router.use(async (req, res, next) => {
+  const domain = await Domain.findOne({
+    // req.get('origin')은 request header의 origin을 가져온다
+    // axios.defaults.headers.origin로 설정을 해줬었다
+    // ?는 optional chaining 연산자
+    where: { host: url.parse(req.get('origin'))?.host }
+  });
+  if (domain) {
+    cors({
+      origin: true,
+      credentials: true,
+    })(req, res, next);
+  } else {
+    next();
+  }
+});
 
 router.post('/token', apiLimiter, async (req, res) => {
   const { clientSecret } = req.body;

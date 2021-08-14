@@ -24,13 +24,13 @@ nunjucks.configure('views', {
   watch: true,
 });
 sequelize.sync({ force: false })
-  .then(() => {
-    console.log('데이터베이스 연결 성공');
+.then(() => {
+  console.log('데이터베이스 연결 성공');
   })
   .catch((err) => {
     console.error(err);
   });
-
+  
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
@@ -48,10 +48,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/v1', v1);
-app.use('/v2', v2);
 app.use('/auth', authRouter);
 app.use('/', indexRouter);
+app.use('/v1', v1);
+app.use('/v2', v2);
 
 app.use((req, res, next) => {
   const error =  new Error(`${req.method} ${req.url} 라우터가 없습니다.`);

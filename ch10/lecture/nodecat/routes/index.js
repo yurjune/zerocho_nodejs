@@ -54,4 +54,10 @@ router.get('/search/:hashtag', async (req, res, next) => {
   }
 });
 
+router.get('/', (req, res) => {
+  // 여기서 원래는 절대 CLIENT_SECRET을 프론트로 보내면 안된다
+  // 실무에서는 다른 키를 만들어 프론트로 보내자
+  res.render('main', { key: process.env.CLIENT_SECRET });
+})
+
 module.exports = router;
