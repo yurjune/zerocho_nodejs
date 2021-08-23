@@ -28,14 +28,10 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// 실제 파일은 upload 폴더에 들어있지만 요청주소는 /img이다
-// express.static으로 주소 불일치 해결
 // form에서 업로드하는 key와 .single()의 괄호 안 key가 같아야 한다.
 router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
-  console.log(req.file);
-  // 이미지랑 게시글이랑 따로 업로드하는 방식을 사용 중
-  // 따라서 이미지와 게시글이 어디 저장되어있는지 같이 묶어줘야 한다
-  res.json({ url: `/img/${req.file.filename}` });
+  console.log(req.file);  // req.file: 업로드 결과가 들어있음
+  res.json({ url: `/img/${req.file.filename}` }); // req.body.url로 접근
 });
 
 
@@ -44,8 +40,8 @@ const upload2 = multer();
 router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   try {
     const post = await Post.create({
-      content: req.body.content,  // main.html의 textarea의 name="content"??
-      img: req.body.url,  // 이미지와 게시글 엮기
+      content: req.body.content,
+      img: req.body.url,  // 이미지와 게시글 엮기(따로 업로드했으므로)
       UserId: req.user.id,
     });
     const hashtags = req.body.content.match(/#[^\s#]*/g);

@@ -30,7 +30,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 
 router.post('/login', isNotLoggedIn, (req, res, next) => {
   /*
-  localStrategy.js('local')에서 done함수를 만난 후 커스텀 콜백이 실행
+  localStrategy.js에서 done함수를 만난 후 커스텀 콜백이 실행
   커스텀 콜백의 인수는 'local'의 done함수의 인수와 매칭
   커스텀 콜백 내부의 req.login()을 실행시켜 serializeUser()로 user전달
   커스텀 콜백 미사용시 자동으로 req.login() 을 실행
@@ -43,7 +43,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
     if (!user) {
       return res.redirect(`/?loginError=${info.message}`);  // 프론트로 돌려보내줌
     }
-    // 사용자 객체(user)을 받으면 index.js로 가서 serializeUser 실행
+    // 사용자 객체(user)을 받으면 req.user에 user 할당
     // done 만난 후 콜백 실행
     return req.login(user, (loginError) => {
       if (loginError) {
@@ -76,3 +76,10 @@ router.get('/kakao/callback', passport.authenticate('kakao', {
 });
 
 module.exports = router;
+
+
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    // code
+  })
+});

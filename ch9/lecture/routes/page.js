@@ -31,7 +31,7 @@ router.get('/', async (req, res, next) => {
     // })
     // console.log('-------------')
     // console.log(writing.id) // post의 id
-    // console.log(writing.UserId)   // 작성자의 id
+    // console.log(writing.UserId)   // 작성자의 id, foreignKey
     // console.log(writing.User.id)  // 작성자의 id, include 사용시
     const posts = await Post.findAll({
       include: {
