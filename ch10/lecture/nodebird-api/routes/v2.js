@@ -10,9 +10,7 @@ const router = express.Router();
 
 router.use(async (req, res, next) => {
   const domain = await Domain.findOne({
-    // req.get('origin')은 request header의 origin을 가져온다
     // axios.defaults.headers.origin로 설정을 해줬었다
-    // ?는 optional chaining 연산자
     where: { host: url.parse(req.get('origin'))?.host }
   });
   if (domain) {

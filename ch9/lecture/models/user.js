@@ -38,17 +38,15 @@ module.exports = class User extends Sequelize.Model {
   }
   // 팔로잉: 내가 상대를 팔로잉
   // 팔로워: 상대가 나를 팔로잉
-
   static associate(db) {
     db.User.hasMany(db.Post);
     db.User.belongsToMany(db.User, {
-      // 아마 호출하는 유저는 유명인(팔로잉), 타겟 유저는 일반인(팔로워)
+      // 호출하는 유저는 유명인(팔로잉), 타겟 유저는 일반인(팔로워)
       foreignKey: 'followingId',
-      as: 'Followers',  // 컬럼에 대한 별명
+      as: 'Followers',
       through: 'Follow',
     });
     db.User.belongsToMany(db.User, {
-      // 호출하는 유저 일반인, 타겟 유명인
       foreignKey: 'followerId',
       as: 'Followings',
       through: 'Follow',

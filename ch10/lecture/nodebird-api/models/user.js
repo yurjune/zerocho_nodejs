@@ -14,12 +14,12 @@ module.exports = class User extends Sequelize.Model {
       },
       password: {
         type: Sequelize.STRING(100),
-        allowNull: true,  // sns로그인 등의 경우 pw가 없을 수 있다
+        allowNull: true,
       },
-      provider: { // 로그인 제공자
+      provider: {
         type: Sequelize.STRING(10),
         allowNull: false,
-        defaultValue: 'local',  // local or 네이버, 카카오, 구글..
+        defaultValue: 'local',
       },
       snsId: {
         type: Sequelize.STRING(30),
@@ -36,20 +36,15 @@ module.exports = class User extends Sequelize.Model {
       collate: 'utf8_general_ci',
     });
   }
-  // 팔로잉: 내가 상대를 팔로잉
-  // 팔로워: 상대가 나를 팔로잉
-
   static associate(db) {
     db.User.hasMany(db.Post);
     db.User.hasMany(db.Domain);
     db.User.belongsToMany(db.User, {
-      // 아마 호출하는 유저는 유명인(팔로잉), 타겟 유저는 일반인(팔로워)
       foreignKey: 'followingId',
-      as: 'Followers',  // 컬럼에 대한 별명
+      as: 'Followers',
       through: 'Follow',
     });
     db.User.belongsToMany(db.User, {
-      // 호출하는 유저 일반인, 타겟 유명인
       foreignKey: 'followerId',
       as: 'Followings',
       through: 'Follow',

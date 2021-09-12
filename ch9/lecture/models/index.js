@@ -8,7 +8,7 @@ const Hashtag = require('./hashtag');
 
 const db = {}
 const sequelize = new Sequelize(  // db이름, 사용자 이름, 비밀번호, 나머지?
-  config.database, config.username, config.password, config
+  config.database, config.username, config.password, { ...config, logging: false, },
 );
 
 db.sequelize = sequelize;

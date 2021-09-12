@@ -30,18 +30,17 @@ const upload = multer({
 
 // form에서 업로드하는 key와 .single()의 괄호 안 key가 같아야 한다.
 router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
-  console.log(req.file);  // req.file: 업로드 결과가 들어있음
-  res.json({ url: `/img/${req.file.filename}` }); // req.body.url로 접근
+  console.log(req.file);
+  res.json({ url: `/img/${req.file.filename}` });
 });
 
 
 const upload2 = multer();
-// 이미지는 이미 업로드됬고 게시글만 업로드하므로 .none() 사용
 router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   try {
     const post = await Post.create({
       content: req.body.content,
-      img: req.body.url,  // 이미지와 게시글 엮기(따로 업로드했으므로)
+      img: req.body.url,  // 이미지와 게시글 엮기
       UserId: req.user.id,
     });
     const hashtags = req.body.content.match(/#[^\s#]*/g);
@@ -56,10 +55,7 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
             where: { title: tag.slice(1).toLowerCase() },
           })
         }),
-        // cf) Hashtag.upsert: update or insert
       );
-      // belongsToMany 이므로 복수형
-      // result의 첫번 째 것만 꺼내서 addHashtags
       await post.addHashtags(result.map(r => r[0]));
     }
     res.redirect('/');

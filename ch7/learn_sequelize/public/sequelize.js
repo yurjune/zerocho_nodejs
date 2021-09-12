@@ -9,7 +9,7 @@ document.querySelectorAll('#user-list tr').forEach((el) => {
 async function getUser() {
   try {
     const res = await axios.get('/users');
-    const users = res.data; // json?
+    const users = res.data;
     console.log(users);
     const tbody = document.querySelector('#user-list tbody');
     tbody.innerHTML = '';
@@ -59,7 +59,7 @@ async function getComment(id) {
 
       const edit = document.createElement('button');
       edit.textContent = '수정';
-      edit.addEventListener('click', async () => { // 수정 클릭 시
+      edit.addEventListener('click', async () => {
         const newComment = prompt('바꿀 내용을 입력하세요');
         if (!newComment) {
           return alert('내용을 반드시 입력하셔야 합니다');
@@ -74,7 +74,7 @@ async function getComment(id) {
 
       const remove = document.createElement('button');
       remove.textContent = '삭제';
-      remove.addEventListener('click', async () => { // 삭제 클릭 시
+      remove.addEventListener('click', async () => {
         try {
           await axios.delete(`/comments/${comment.id}`);
           getComment(id);

@@ -5,9 +5,9 @@ const User = require('../models/user');
 
 module.exports = () => {
   passport.use(new KakaoStrategy({
-    clientID: process.env.KAKAO_ID, // REST API키: RESP API호출 시 사용
-    callbackURL: '/auth/kakao/callback',  // OAuth Redirect URI
-  }, async (accessToken, refreshToken, profile, done) => {  // OAuth2
+    clientID: process.env.KAKAO_ID,
+    callbackURL: '/auth/kakao/callback',
+  }, async (accessToken, refreshToken, profile, done) => {
     console.log(accessToken);
     console.log('kakao profile', profile);
     try {
@@ -16,7 +16,7 @@ module.exports = () => {
       });
       if (exUser) {
         done(null, exUser);
-      } else {  // 가입안했으면 회원가입
+      } else {
         const newUser = await User.create({
           email: profile._json && profile._json.kakao_account_email,
           nick: profile.displayName,

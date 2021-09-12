@@ -1,4 +1,3 @@
-// nodecat이 nodebird에게 보내는 요청을 처리하는 라우터
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
@@ -53,7 +52,7 @@ router.get('/test', verifyToken, (req, res) => {
 });
 
 router.get('/posts/my', verifyToken, (req, res) => {
-  Post.findAll({ where: { userId: req.decoded.id } })  // userId
+  Post.findAll({ where: { userId: req.decoded.id } })
     .then((posts) => {
       res.json({
         code: 200,

@@ -20,11 +20,6 @@ router.post('/', async (req, res, next) => {
     // const userComment = await user.addComment(comment);  // 댓글과 작성자를 연결;
     // res.status(201).json(userComment);
     // /*
-    // cf) 메서드
-    // getCommets: 조회, setComments: 수정, addComment: 하나 생성, addComments: 여러개 생성 
-    // 동사 뒤에 모델 이름이 붙는 형식으로 생성된다.
-    // */
-
   } catch (err) {
     console.error(err);
     next(err);

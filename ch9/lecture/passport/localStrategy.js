@@ -13,7 +13,7 @@ module.exports = () => {
     try {
       const exUser = await User.findOne({ where: { email } });
       if (exUser) {
-        const result = await bcrypt.compare(password, exUser.password); // true or false
+        const result = await bcrypt.compare(password, exUser.password);
         if (result) {
           // the verify callback invokes done
           done(null, exUser);

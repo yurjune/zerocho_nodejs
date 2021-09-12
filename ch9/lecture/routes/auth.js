@@ -6,13 +6,11 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
-// 회원가입 라우터
 router.post('/join', isNotLoggedIn, async (req, res, next) => {
   const { email, nick, password } = req.body;
   try {
-    // email에 왜 중괄호??
     const exUser = await User.findOne({ where: { email } });
-    if (exUser) { // 기존에 가입한 이메일인지 확인
+    if (exUser) {
       return res.redirect('/join?error=exist');
     }
     const hash = await bcrypt.hash(password, 12);
@@ -50,12 +48,10 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
-      // 이 때 세션 쿠키를 브라우저로 보내줘요
+      // req.login()은 알아서 세션 쿠키를 브라우저로 보내줘요
       return res.redirect('/');
     });
-  })(req, res, next); // 미들웨어 안의 미들웨어
-  // authenticate()는 middleware function object를 리턴하므로,
-  // (req, res, next)를 끝에 붙여서 evoke 해주어 요청 응답 주기 유지
+  })(req, res, next); // 미들웨어 확장
 });
 
 router.get('/logout', isLoggedIn, (req, res) => {

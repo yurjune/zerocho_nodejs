@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-// const { Sequelize } = require('sequelize'); 왜 아닌지 생각하기
 
 const User = require('./user');
 const Comment = require('./comment');
