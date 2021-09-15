@@ -28,12 +28,10 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// form에서 업로드하는 key와 .single()의 괄호 안 key가 같아야 한다.
 router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
   console.log(req.file);
   res.json({ url: `/img/${req.file.filename}` });
 });
-
 
 const upload2 = multer();
 router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
